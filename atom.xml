@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Ciel&#39;s Blog</title>
+  
+  <subtitle>You see what you believe.</subtitle>
+  <link href="/atom.xml" rel="self"/>
+  
+  <link href="http://cielzhao.com/"/>
+  <updated>2018-03-01T15:42:14.000Z</updated>
+  <id>http://cielzhao.com/</id>
+  
+  <author>
+    <name>Ciel</name>
+    
+  </author>
+  
+  <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>js数组去重的方法</title>
+    <link href="http://cielzhao.com/2018/03/01/js%E6%95%B0%E7%BB%84%E5%8E%BB%E9%87%8D%E7%9A%84%E6%96%B9%E6%B3%95/"/>
+    <id>http://cielzhao.com/2018/03/01/js数组去重的方法/</id>
+    <published>2018-03-01T15:41:15.000Z</published>
+    <updated>2018-03-01T15:42:14.000Z</updated>
+    
+    <content type="html"><![CDATA[<ul><li>方法一（利用indexOf判断，有两种方案）<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">//若要ie8以下浏览器支持数组的indexOf方法，先对其进行兼容。</span><br><span class="line">Array.prototype.indexOf = Array.prototype.indexOf || <span class="keyword">function</span>(val) &#123;</span><br><span class="line"><span class="keyword">for</span>(var i = 0; i &lt; this.length; i++) &#123;</span><br><span class="line"><span class="keyword">if</span>(this[i] === val) &#123;</span><br><span class="line"><span class="built_in">return</span> i;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">return</span> -1;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li></ul><p>1.利用indexOf的返回值判断是否存在<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">//遍历数组，创建一个新数组，利用indexOf判断新数组中是否存在该值，不存在则push到新数组中，最后返回新数组</span><br><span class="line"><span class="keyword">function</span> arrRemoveRepeat(arr) &#123;</span><br><span class="line">var newArr = [];</span><br><span class="line"><span class="keyword">for</span>(var i = 0; i &lt; arr.length; i++) &#123;</span><br><span class="line"><span class="keyword">if</span>(newArr.indexOf(arr[i]) === -1) &#123;</span><br><span class="line">newArr.push(arr[i]);</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">return</span> newArr;</span><br><span class="line">&#125;</span><br><span class="line">var arr = [21, 43, 15, 21, 36]; </span><br><span class="line">console.log(arrRemoveRepeat(arr));   //[21, 43, 15, 36]</span><br></pre></td></tr></table></figure></p><p>2.利用indexOf的返回值判断是否等于索引值<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">//遍历数组，创建一个新数组，利用indexOf判断该值在数组中首次出现的位置是否等于当前索引值，相等则push到新数组中，最后返回新数组</span><br><span class="line"><span class="keyword">function</span> arrRemoveRepeat(arr) &#123;</span><br><span class="line">var newArr = [];</span><br><span class="line"><span class="keyword">for</span>(var i = 0; i &lt; arr.length; i++) &#123;</span><br><span class="line"><span class="keyword">if</span>(arr.indexOf(arr[i]) === i) &#123;</span><br><span class="line">newArr.push(arr[i]);</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">return</span> newArr;</span><br><span class="line">&#125;</span><br><span class="line">var arr = [21, 43, 15, 21, 36]; </span><br><span class="line">console.log(arrRemoveRepeat(arr));   //[21, 43, 15, 36]</span><br></pre></td></tr></table></figure></p><ul><li><p>方法二（对象键值对法）</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">//创建新的对象和数组，遍历传入数组时判断值是否为新对象的键值</span><br><span class="line"><span class="keyword">function</span> arrRemoveRepeat(arr) &#123;</span><br><span class="line">var temp = &#123;&#125;, newArr = [], val, <span class="built_in">type</span>;</span><br><span class="line"><span class="keyword">for</span>(var i = 0; i &lt; arr.length; i++) &#123;</span><br><span class="line">val = arr[i];</span><br><span class="line"><span class="built_in">type</span> = typeof val;</span><br><span class="line"><span class="keyword">if</span>(!temp[val]) &#123;</span><br><span class="line">temp[val] = [<span class="built_in">type</span>];</span><br><span class="line">newArr.push(val);</span><br><span class="line">&#125; <span class="keyword">else</span> <span class="keyword">if</span>(temp[val].indexOf(<span class="built_in">type</span>) === -1) &#123;</span><br><span class="line">temp[val].push(<span class="built_in">type</span>);</span><br><span class="line">newArr.push(val);</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">return</span> newArr;</span><br><span class="line">&#125;</span><br><span class="line">var arr = [21, 43, 15, 21, 36]; </span><br><span class="line">console.log(arrRemoveRepeat(arr));   //[21, 43, 15, 36]</span><br></pre></td></tr></table></figure></li><li><p>方法三（排序相邻比较法）</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">//排序数组，遍历时只push不与前一值重复的值，需要注意的是这样会改变原数组的顺序</span><br><span class="line"><span class="keyword">function</span> arrRemoveRepeat(arr) &#123;</span><br><span class="line">arr.sort(<span class="keyword">function</span>(a,b)&#123;</span><br><span class="line">      <span class="built_in">return</span> a - b;</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">var newArr = [arr[0]];</span><br><span class="line"><span class="keyword">for</span>(var i = 0; i &lt; arr.length; i++) &#123;</span><br><span class="line"><span class="keyword">if</span>(arr[i] !== newArr[newArr.length-1]) &#123;</span><br><span class="line">newArr.push(arr[i]);</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">return</span> newArr;</span><br><span class="line">&#125;</span><br><span class="line">var arr = [21, 43, 15, 21, 36]; </span><br><span class="line">console.log(arrRemoveRepeat(arr));   //[21, 43, 15, 36]</span><br></pre></td></tr></table></figure></li><li><p>方法四（遍历数组法）</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">//创建一个新数组，双层循环遍历数组，外层循环元素，内层循环比较值，若不相同则push进新数组</span><br><span class="line"><span class="keyword">function</span> arrRemoveRepeat(arr) &#123;</span><br><span class="line">var newArr = [];</span><br><span class="line"><span class="keyword">for</span>(var i = 0; i &lt; arr.length; i++) &#123;</span><br><span class="line"><span class="keyword">for</span>(var j = i + 1; j &lt; arr.length; j++) &#123;</span><br><span class="line"><span class="keyword">if</span>(arr[i] === arr[j]) &#123;</span><br><span class="line">j = ++ i;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line">newArr.push(arr[i]);</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">return</span> newArr;</span><br><span class="line">&#125;</span><br><span class="line">var arr = [21, 43, 15, 21, 36]; </span><br><span class="line">console.log(arrRemoveRepeat(arr));   //[21, 43, 15, 36]</span><br></pre></td></tr></table></figure></li><li><p>方法五（利用ES6的set）</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">//Set数据结构，它类似于数组，其成员的值都是唯一的。利用Array.from将Set结构转换成数组</span><br><span class="line"><span class="keyword">function</span> arrRemoveRepeat(arr) &#123;</span><br><span class="line"><span class="built_in">return</span> Array.from(new Set(arr));</span><br><span class="line">&#125;</span><br><span class="line">var arr = [21, 43, 15, 21, 36]; </span><br><span class="line">console.log(arrRemoveRepeat(arr));   //[21, 43, 15, 36]</span><br></pre></td></tr></table></figure></li></ul><p>以上是js的几种数组去重方法，如果用的是jQuery，可以参考以下方法：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">//jQuery中的$.inArray() 函数用于在数组中查找指定值，并返回它的索引值（如果没有找到，则返回-1）</span><br><span class="line"><span class="keyword">function</span> arrRemoveRepeat(arr) &#123;</span><br><span class="line">var newArr = [];</span><br><span class="line">$.each(arr, <span class="keyword">function</span>(i, el)&#123;</span><br><span class="line">  <span class="keyword">if</span>($.inArray(el, newArr) === -1) &#123;</span><br><span class="line">  newArr.push(el);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br><span class="line"><span class="built_in">return</span> newArr;</span><br><span class="line">&#125;</span><br><span class="line">var arr = [21, 43, 15, 21, 36]; </span><br><span class="line">console.log(arrRemoveRepeat(arr));   //[21, 43, 15, 36]</span><br></pre></td></tr></table></figure></p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;ul&gt;
+&lt;li&gt;方法一（利用indexOf判断，有两种方案）&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=
+      
+    
+    </summary>
+    
+    
+      <category term="javascript" scheme="http://cielzhao.com/tags/javascript/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>圣诞节之后</title>
+    <link href="http://cielzhao.com/2017/12/26/%E5%9C%A3%E8%AF%9E%E8%8A%82%E4%B9%8B%E5%90%8E/"/>
+    <id>http://cielzhao.com/2017/12/26/圣诞节之后/</id>
+    <published>2017-12-26T15:58:18.000Z</published>
+    <updated>2017-12-26T16:14:36.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>有一年🎄，我收到了好多🍎。<br>有一年🎄，我收到了一个🍎。<br>今年的🎄，我收到了零个🍎。<br>圣诞节之后，很快，又是新的一年了。</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;有一年🎄，我收到了好多🍎。&lt;br&gt;有一年🎄，我收到了一个🍎。&lt;br&gt;今年的🎄，我收到了零个🍎。&lt;br&gt;圣诞节之后，很快，又是新的一年了。&lt;/p&gt;
+
+      
+    
+    </summary>
+    
+    
+      <category term="小事" scheme="http://cielzhao.com/tags/%E5%B0%8F%E4%BA%8B/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Hexo博客主题Yilia更换Gitment评论系统</title>
+    <link href="http://cielzhao.com/2017/12/25/Hexo%E5%8D%9A%E5%AE%A2%E4%B8%BB%E9%A2%98Yilia%E6%9B%B4%E6%8D%A2Gitment%E8%AF%84%E8%AE%BA%E7%B3%BB%E7%BB%9F/"/>
+    <id>http://cielzhao.com/2017/12/25/Hexo博客主题Yilia更换Gitment评论系统/</id>
+    <published>2017-12-25T15:38:27.000Z</published>
+    <updated>2017-12-25T15:46:17.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>搭建这个博客的时候本来用了友言评论系统，刚开始还可以使用，可是没过几天就打不开了，出现下面的报错信息，<img src="http://upload-images.jianshu.io/upload_images/1657993-662edf6ec4fd5164.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="error1.png">在线客服联系不上，进到友言微博里看到很久没有更新过动态，也不知道有没有在继续维护。</p><p>还是稍微有些强迫症，总觉得没有评论的话这个博客不是很完整。于是又在网上搜了很多相关信息，找到了 <a href="https://github.com/imsun/gitment" target="_blank" rel="noopener">Gitment</a> 这个解决方案；虽然 Gitment 只能使用 GitHub 账号进行评论，但是基本可以满足需求。然后发现 yilia 主题的_config.yml文件里本来就有对应 Gitment 的配置项。。。应该是刚开始的时候没注意到这个地方，找到的教程时间比较早，当时 yilia 主题配置项里还没有加上 Gitment，所以教程里也没有对应的配置步骤。这个，，，真的是绕了一大圈啊😂。</p><p>Gitment 是作者实现的一款基于 GitHub Issues 的评论系统，这是<a href="https://imsun.net/posts/gitment-introduction/" target="_blank" rel="noopener">作者的个人博客</a>，里边有详细的使用教程和相关问题说明。因为是基于 GitHub Issues 的，所以需要注册 <a href="https://github.com/settings/applications/new" target="_blank" rel="noopener">OAuth Application</a> ，如果注册时对需要填写的信息不是特别清楚，可以参考 csdn 上的 <a href="http://blog.csdn.net/anttu/article/details/77688004" target="_blank" rel="noopener">Gitment</a> 这篇文章进行注册。整个过程非常简单，几分钟就能搞定。</p><p>最后放一个测试成功的截图吧。<br><img src="http://upload-images.jianshu.io/upload_images/1657993-ff1ff4b0e716dbfc.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;搭建这个博客的时候本来用了友言评论系统，刚开始还可以使用，可是没过几天就打不开了，出现下面的报错信息，&lt;img src=&quot;http://upload-images.jianshu.io/upload_images/1657993-662edf6ec4fd5164.png?i
+      
+    
+    </summary>
+    
+    
+      <category term="关于博客" scheme="http://cielzhao.com/tags/%E5%85%B3%E4%BA%8E%E5%8D%9A%E5%AE%A2/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>D3.js学习笔记</title>
+    <link href="http://cielzhao.com/2017/12/21/D3-js%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-0/"/>
+    <id>http://cielzhao.com/2017/12/21/D3-js学习笔记-0/</id>
+    <published>2017-12-21T15:39:59.000Z</published>
+    <updated>2017-12-25T16:24:52.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>项目中要用到 <a href="https://d3js.org/" target="_blank" rel="noopener">D3.js</a>，个人也比较感兴趣，于是在空闲的时间开始学习，目前 D3.js 已经更新到了4.0版本，这是在网上找的 <a href="https://github.com/xswei/d3js_doc" target="_blank" rel="noopener">D3.js V4版本中文参考文档</a>，还有这个<a href="https://github.com/tianxuzhang/d3.v4-API-Translation#hierarchies" target="_blank" rel="noopener">D3.js 4.x 中文手册</a>，里边的内容都很详细。</p><p>但是如果是想找入门级基础教程的话，推荐极客学院的 <a href="http://wiki.jikexueyuan.com/project/d3wiki/" target="_blank" rel="noopener">D3.js 入门教程</a>，有实例和效果图，简单易懂，可以跟着自己实现一遍，不好的一点就是这个教程是 V3 版本的，其实最基础的部分都相差不多。还有<a href="http://d3.decembercafe.org/index.html" target="_blank" rel="noopener">十二月咖啡馆</a>的这个教程。如果调用的是 V4 版本的 js，可能会出现一些问题，大多是因为新版本的 api 变动。有些在网上找到了答案，有些没有。在此先把遇到的问题记录下来，后面有进展了再更新。<br>1.API变动</p><ul><li>d3.svg.axis().scale(xScale).orient(“bottom”)  -&gt; d3.axisBottom(xScale)</li><li>ease(“bounce”) -&gt; ease(d3.easeBounce)</li><li>d3.layout.pie()  -&gt; d3.pie()</li><li>d3.svg.arc() -&gt; d3.arc()</li><li>d3.scale.category10() -&gt; d3.scaleOrdinal(d3.schemeCategory10)</li><li>d3.layout.force() -&gt; d3.forceSimulation()</li></ul><p>2.写法报错</p><ul><li>attr({})一次赋值多个属性会报错，style({})一次修改多个样式的写法也会报错，挨个写不会出问题，attr().attr()；style().style()。</li></ul>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;项目中要用到 &lt;a href=&quot;https://d3js.org/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;D3.js&lt;/a&gt;，个人也比较感兴趣，于是在空闲的时间开始学习，目前 D3.js 已经更新到了4.0版本，这是在网上找的 &lt;a href=&quot;h
+      
+    
+    </summary>
+    
+    
+      <category term="D3" scheme="http://cielzhao.com/tags/D3/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>position属性</title>
+    <link href="http://cielzhao.com/2017/12/18/position%E5%B1%9E%E6%80%A7/"/>
+    <id>http://cielzhao.com/2017/12/18/position属性/</id>
+    <published>2017-12-18T13:34:25.000Z</published>
+    <updated>2017-12-21T14:07:46.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>position 属性在页面布局定位元素的时候会经常用到，自以为已经运用的很熟练，直到有一天发现对 relative 的理解居然有错，于是在 <a href="http://www.w3school.com.cn/cssref/pr_class_position.asp" target="_blank" rel="noopener">W3school</a> 上重新看了一遍教程。在此记录一下自己的理解，加深印象。</p><p>position 属性规定元素的定位类型，可能的值有五个，分别是 static, inherit, relative, absolute, fixed。所有主流浏览器都支持 position 属性，但任何版本的 Internet Explorer （包括 IE8）都不支持属性值 “inherit”。</p><ul><li><p>static<br>static 有静止的意思，顾名思义就是元素<br>没有定位，这个属性值是 position 的默认值，一般很少给元素写出这个默认属性，但如果用 js 去获取 position 属性值的话会获取到值为 static。此时元素出现在正常的文档流中，top, bottom, left, right 或者 z-index 声明均会被忽略，没有效果。</p></li><li><p>relative<br>生成相对定位的元素，相对于其正常位置进行定位。例如，”left:20” 会向元素的 left 位置添加 20 像素。</p></li><li><p>absolute<br>生成绝对定位的元素，相对于 static 定位以外的第一个父元素进行定位。元素的位置通过 “left”, “top”, “right” 以及 “bottom” 属性进行规定。</p></li><li><p>fixed<br>生成绝对定位的元素，相对于浏览器窗口进行定位。元素的位置通过 “left”, “top”, “right” 以及 “bottom” 属性进行规定。</p></li><li><p>inherit<br>规定应该从父元素继承 position 属性的值。</p></li></ul><p>以上属性值对应的效果可以在 <a href="https://codepen.io/cielzhao/pen/ppywmg" target="_blank" rel="noopener">codepen</a> 上自己进行调试。</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;position 属性在页面布局定位元素的时候会经常用到，自以为已经运用的很熟练，直到有一天发现对 relative 的理解居然有错，于是在 &lt;a href=&quot;http://www.w3school.com.cn/cssref/pr_class_position.asp&quot; 
+      
+    
+    </summary>
+    
+    
+      <category term="css" scheme="http://cielzhao.com/tags/css/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Hello World</title>
+    <link href="http://cielzhao.com/2017/12/18/hello-world/"/>
+    <id>http://cielzhao.com/2017/12/18/hello-world/</id>
+    <published>2017-12-18T13:29:50.000Z</published>
+    <updated>2017-12-21T14:06:15.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>一直想有一个自己的个人博客，虽然早早的申请了域名，写了一些静态页面，可自己不是设计出身，页面不是很好看，也就因此搁置了。直到前几天百度搜一个技术上遇到的问题，看到一个很好看的博客，就研究了一下，是用<a href="https://github.com/" target="_blank" rel="noopener">GithubPages</a>+<a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>博客主题<a href="https://github.com/litten/hexo-theme-yilia" target="_blank" rel="noopener">Yilia</a>搭建的（请原谅我的无知，蓝朋友说他好几年前就知道hexo了😂）。进一步了解之后发现Hexo还有很多其他主题，一一看过之后觉得Yilia主题我个人更喜欢，这是作者的<a href="http://litten.me/" target="_blank" rel="noopener">博客地址</a>。</p><p>确定好主题之后就按照网上找的教程一步一步操作了，过程并不是很复杂，网上的教程已经足够详细，没打算再重新写一遍，我把我用到的教程列举如下：</p><ul><li><a href="https://www.liaoxuefeng.com/wiki/0013739516305929606dd18361248578c67b8067c8c017b000/" target="_blank" rel="noopener">廖雪峰的git教程</a></li><li><a href="https://jingyan.baidu.com/article/dca1fa6fa1e403f1a5405262.html" target="_blank" rel="noopener">github关联域名</a></li><li><a href="http://www.cnblogs.com/visugar/p/6821777.html" target="_blank" rel="noopener">hexo从零开始到搭建完整</a></li></ul><p>关于评论插件，之所以用<a href="http://www.uyan.cc/" target="_blank" rel="noopener">友言</a>，是因为没有其他选择了。其实更喜欢<a href="http://changyan.kuaizhan.com/" target="_blank" rel="noopener">畅言</a>的样式，yilia主题也支持配置，可无奈畅言需要域名备案，我是基于github搭建的，没打算买服务器，只能放弃。网上搜索其他方法，有人说可以随便找个已经备案的域名，通过审核之后再换成自己的就行，暂且不论是否可行，在未经许可的情况下用别人的备案域名总是不好的，于是放弃。后来发现有人用友言配置，评论功能也还行，果断注册使用。可以参考 <a href="http://www.jianshu.com/p/b2abb157f1fa" target="_blank" rel="noopener">Hexo + yilia 主题 +githubpages博客添加友言评论功能</a> 这篇文章添加友言评论功能。</p><p>搭建完成之后，运行命令：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure></p><p>在浏览器打开 <a href="http://localhost:4000" target="_blank" rel="noopener">http://localhost:4000</a> 就能看到效果。<br>然后继续运行命令：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ hexo clean</span><br><span class="line">$ hexo generate</span><br><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure></p><p>（以上命令除了 hexo clean 之外都有简写，hexo加后一个单词的首字母即可）就可以同步到github，这时候打开域名就能看到完整效果。每次用命令同步到github上的文件只有yilia主题source目录下的文件：<br><img src="http://upload-images.jianshu.io/upload_images/1657993-14ffaed82e5ef725.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p><p>其中的CNAME不是自动生成的，要单独加进去，不然的话直接打开域名就找不到页面了。</p><p>我搭建博客的时候是在公司电脑上同步到github的，等回到家里想做一些修改的时候就遇到了问题，因为得在自己的电脑上重新安装一遍。这时候可以参考 <a href="http://blog.csdn.net/eternity1118_/article/details/71194395?ref=myread" target="_blank" rel="noopener">hexo：更换电脑，如何继续写博客</a>  和 <a href="https://www.zhihu.com/question/21193762" target="_blank" rel="noopener">使用hexo，如果换了电脑怎么更新博客？</a> 来解决问题。</p><p>我是在github上新建了一个myblog仓库来备份源文件，里边包含yilia主题仓库，因为对于一个仓库包含另一个仓库的问题并不是很了解，上传到github后主题yilia文件无法点击查看详情，在本地修改之后也push不上去，一直报错，刚开始以为是文件出了问题，最后居然傻到把整个库删了重建，结果还是一样。后来找到相关文章<a href="http://www.jianshu.com/p/491609b1c426" target="_blank" rel="noopener">【Git】子模块：一个仓库包含另一个仓库</a>，解决了我的困惑。</p><p>不过最后用了另外一种方法，先fork了<a href="https://github.com/litten/hexo-theme-yilia" target="_blank" rel="noopener">yilia主题</a>，然后在其基础上修改提交，但这么做的前提是自己的博客themes文件夹下clone的是自己frok过来的主题，而不是原作者的。这么做可以省去在一个库里来回切换分支的操作，还是在蓝朋友的指导下完成的，在此非常感谢。</p><p>每次 “HelloWorld” 运行成功的时候，都是一个新的开始。</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;一直想有一个自己的个人博客，虽然早早的申请了域名，写了一些静态页面，可自己不是设计出身，页面不是很好看，也就因此搁置了。直到前几天百度搜一个技术上遇到的问题，看到一个很好看的博客，就研究了一下，是用&lt;a href=&quot;https://github.com/&quot; target=&quot;
+      
+    
+    </summary>
+    
+    
+      <category term="关于博客" scheme="http://cielzhao.com/tags/%E5%85%B3%E4%BA%8E%E5%8D%9A%E5%AE%A2/"/>
+    
+  </entry>
+  
+</feed>
